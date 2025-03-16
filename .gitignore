@@ -1,0 +1,53 @@
+# Java/Spring Boot 関連の設定
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.db
+*.sql
+*.sqlite
+*.h2.db
+*.bak
+target/
+build/
+.idea/
+.gradle/
+*.iml
+*.hprof
+.DS_Store
+.vscode/
+
+# IntelliJ IDEA (特に .idea フォルダ)
+.idea/
+
+# Eclipse に関連するファイル
+*.project
+*.classpath
+*.settings/
+
+# Maven の設定（依存関係の管理）
+.mvn/
+*.mvn/
+target/
+
+# Gradle の設定（もしGradleを使っている場合）
+.gradle/
+build/
+
+
+# React 関連
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+
+# ローカル環境の設定
+.env
+.env.local
+
+# OS関連
+Thumbs.db
+Desktop.ini
+.DS_Store
