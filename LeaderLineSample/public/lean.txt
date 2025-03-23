@@ -1,0 +1,114 @@
+イベントリスナーとは
+    ざっくりいうと画面に遷移したり、ボタンを押したり、マウスを特定の部品に置いたりしたときに起こしたい事柄のこと。
+    例：    ボタンを押したら特定の画面に遷移する（これがイベント）
+            ↑
+            ユーザーの操作などを監視してそれが起こったときに実行される関数（これがイベントリスナー）
+            つまりこの場合、「ボタン押したら画面遷移したい」って事象（イベント）を聞いてる（リスナー）ってこと。
+
+Domとは
+    htmlなどのマークアップ言語にある要素を変更・追加・削除できる仕組み
+    <div>タグや<p>タグなどにある要素を操作できる。
+    reactではuseRefというフックを使ってDOMを操作する。
+    ※フックとは
+    reactの機能を使う為のメソッド。javaでいうとsubstringや.lengthなんかの最初からサポートされてるメソッドが近いのかも。
+    クラス関数ではないのでstaticメソッドがその位置なのかな
+
+    例：
+    const myRef = useRef(null);//何のイベントリスナーもないuseRefを定義
+
+    //イベントリスナーを定義
+    const update= () =>{
+        if(myRef.current)｛//currentプロパティはDOMの現在を指す。つまり「myRefの今のDOM要素はどのような状態かを表わす」
+            myRef.current.innerText="更新" //innerText関数はテキストを挿入する関数
+        ｝
+    }
+
+        return{
+            <div>
+                {/*refプロパティで何のイベントも入っていないDOMを代入してるので何も変わらない**/}
+                <div ref={myRef}>テスト</div>
+                {/*ボタンを押したらイベントが起こる。ここでは"更新"が表示される*/}
+                <button onclick={update}>更新します</button>
+            </div>
+   }
+
+
+
+useEfectとは
+    コンポーネントが描画された時に実行する処理を定義するためのもの
+    例えばAPIを使ってバックエンドからデータを取ってきて画面に表示させたり
+    イベントリスナーを設定してコンソールに特定の文字を表示させたりコンポーネントを表示したらダイアログをポップアップさせるなど。
+    例 :
+        const EXUseEfect{
+            useEfect(() =>{
+                console.log("useEfect"を使ってコンソールに表示");
+                }, []);
+                //useEffect(() => {...}, []) と書くと 初回の描画時にのみ実行される
+                //依存リスト（[] の部分）に変数を入れると、その値が変わるたびに実行される
+       }
+    
+useEffect + useRef を組み合わせる
+    useEfectでコンポーネントが描画された時にuseRefで取ってきたDOMを操作する。
+    例：コンポーネントが描画されたときにテキストの色を赤に変える
+
+    const mixUse = ()=>{
+        const textRef = useRef(null);//何のイベントリスナーもないuseRefを定義
+
+        useEfect(() => {
+            if(textRef.current){
+                textRef.current.style.color="red";
+            }
+        }, []);
+        //useEffect(() => {...}, []) と書くと 初回の描画時にのみ実行される
+        return <div ref={textRef}> 赤になってるかな？</div>;
+    }
+
+5. useEffect の使い分け
+    useEffect の書き方	いつ実行されるか	例
+    useEffect(() => {...}, [])	初回のみ	データの取得、初期化
+    useEffect(() => {...}, [変数])	変数が変わるたび	フィルタ更新、状態変化の処理
+    useEffect(() => { return () => {...} }, [])	コンポーネント削除時	クリーンアップ（タイマーの解除など）
+まとめ
+    useRef を使うと、React でも直接 DOM を操作できる
+    useEffect はコンポーネントの描画後に実行される処理を定義できる
+    useRef + useEffect を組み合わせることで、リーダーラインなどの描画処理も制御可能
+    if (textRef.current)	「textRefが存在するなら」
+    if (textRef.current && textRef.current.style.color === "red")	「textRefが存在していて、かつ色が赤だった場合」
+    if (textRef.current) { textRef.current.style.color = "red"; }	「textRefが存在するなら、色を赤にする（問答無用で変更）」
+
+leader-line-newの使い方
+ import { useRef, useEffect } from "react";
+import LeaderLine from "leader-line-new";
+
+const LeaderLineExample = () => {
+  //スタートラインのdomを明示的に定義
+  const startRef = useRef<HTMLDivElement | null>(null);
+  //エンドラインのdomを明示的に定義
+  const endRef = useRef<HTMLDivElement | null>(null);
+  //LeaderLineのdomを明示的に定義
+  const lineRef = useRef<LeaderLine | null>(null);  // LeaderLine型を指定
+  //コンポーネントが描画された時に実行する処理を定義
+  useEffect(() => {
+    //スタート＆エンドラインが存在していた場合
+    if (startRef.current && endRef.current) {
+    　//LeaderLineオブジェクトをnewしてスタート＆エンドラインを引数とする（これが罫線となる）
+      lineRef.current = new LeaderLine(startRef.current, endRef.current);
+    }
+
+    //内部的に残るので消す必要がある。
+    return () => {
+      lineRef.current?.remove(); // クリーンアップ
+    };
+  }, []);
+
+  return (
+    <div>
+      //ここから
+      <div ref={startRef}>Start</div>
+      //ここに罫線を引く
+      <div ref={endRef}>End</div>
+    </div>
+  );
+};
+
+export default LeaderLineExample;
