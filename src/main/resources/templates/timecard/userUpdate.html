@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	</meta>
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<!--CSS読込-->
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<!--js読込-->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+	</meta>
+
+	<title>UserUpdate</title>
+</head>
+
+<body>
+	<div　class="text-center">
+		<h1>UserUpdate</h1>
+	</div>
+	<div>
+		<div>ID:<span th:text="${session.user.userId}"></span></div>
+		<div>Name:<span th:text="${session.user.name}"></span></div>
+	</div>
+	</div>
+	<div>
+		<div>
+			<th:block th:if="msg !=null">
+				<div><span th:text="${msg}"></span> </div>
+			</th:block>
+		</div>
+		<div>
+			<form method="POST" th:action="@{/timecard/userUpdate}" th:object="${user}">
+				<div>
+					名前：<input type="text" th:field="*{name}" th:errorclass="is-invalid" />
+					<div class="invalid-feedback" th:errors="*{name}"></div>
+				</div>
+				<div>
+					パスワード：<input type="password" th:field="*{password}" th:errorclass="is-invalid" />
+					<div class="invalid-feedback" th:errors="*{password}"></div>
+				</div>
+				<input type="submit" value="更新" class="btn btn-primary" />
+				<input type="reset" value="クリア" class="btn btn-danger" />
+			</form>
+		</div>
+		<div>
+			<form method="GET" th:action="@{/timecard/timecard}">
+				<button type="submit" name="reTimecard" class="btn btn-dark">
+					戻る
+				</button>
+			</form>
+		</div>
+	</div>
+	<div>
+		<th:block th:if="${user.password} != null">
+			<div>
+				以下のように変更致しました。
+				<div　th:object="${user}">
+					<div>名前：<span th:text="*{name}"></span></div>
+					<div>パスワード：<span th:text="*{password}"></span></div>
+				</div>
+			</div>
+		</th:block>
+	</div>
+</body>
+
+</html>

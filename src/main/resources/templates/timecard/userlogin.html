@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	</meta>
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<!--CSS読込-->
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<!--js読込-->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+	</meta>
+
+	<title>UserLogin</title>
+</head>
+
+<body>
+	<div class="text-center">
+		<h1>UserLogin</h1>
+		<div class="w-100 p-3 form-group">
+			<form method="GET" th:object="${user}" th:action="@{/timecard/timecard}">
+				<div class="form-group row">
+					<div class="w-100 p-3 display-4">
+						UserID：<input type="text" th:field="*{userId}" />
+					</div>
+					<div class="w-100 p-3 display-4">
+						PassWord：<input type="text" th:field="*{password}" />
+					</div>
+				</div>
+				<th:block th:if="${msg} != null">
+					<p><span th:text="${msg}"></span></p>
+				</th:block>
+				<input type="submit" class="btn btn-primary" value="ログイン" />
+				<input type="reset" class="btn btn-warning" value="クリア" />
+			</form>
+			<div>
+				<form method="GET" th:action="@{/timecard/userRegist}">
+					<input type="submit" value="ユーザー登録" class="btn btn-success" />
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
