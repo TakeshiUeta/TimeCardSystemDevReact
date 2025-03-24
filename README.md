@@ -141,4 +141,19 @@ axios.get('http://localhost:8080/api/session', { withCredentials: true }) とい
 結論
 同じポートで動かす場合、axios の設定を消しても動作はしますが、認証情報を送信する必要がある場合（例えばセッション管理が必要な場合）は、withCredentials: true を残しておくと良いです。
 
+念のためwWbConfigの記述をコピー
+package com.example.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/{spring:\\w+}").setViewName("forward:/index.html");
+        registry.addViewController("/**/{spring:\\w+}").setViewName("forward:/index.html");
+    }
+}
 
